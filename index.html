@@ -570,6 +570,27 @@
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
         }
 
+        // Close panel on mobile
+        document.getElementById('close-panel').addEventListener('click', () => {
+            document.getElementById('info-panel').classList.remove('info-panel-active');
+        });
+
+        // Search functionality
+        document.getElementById('search-btn').addEventListener('click', () => {
+            const searchValue = document.getElementById('search').value.toLowerCase();
+            const matchedData = ipData.find(data =>
+                data.region.toLowerCase().includes(searchValue) ||
+                data.groups.toLowerCase().includes(searchValue)
+            );
+
+            if (matchedData) {
+                map.flyTo(matchedData.coords, 6, { duration: 1 });
+                markers[matchedData.region].fire('click');
+            } else {
+                alert('No matching region or group found.');
+            }
+        });
+
         // Initialize theme based on localStorage or system preference
         const savedTheme = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
